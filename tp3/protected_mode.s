@@ -19,7 +19,7 @@ start:
 gdt_start:
     .quad 0x0000000000000000    # first segment invalid
     .quad 0x00CF9A000000FFFF    # code segment, 4gb, ring 0, executable, readable
-    .quad 0x00CF92000000FFFF    # data segment, 4gb, ring 0, read-only
+    .quad 0x00CF92000000FFFF    # data segment, 4gb, ring 0, readable, writeable
 gdt_end:
 
 gdt_descriptor:
