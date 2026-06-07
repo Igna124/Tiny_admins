@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>CDD Sensor</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { 
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                max-width: 700px; 
+                margin: 40px auto; 
+                padding: 0 20px; 
+                background: #141721; 
+                color: #ffffff; 
+            }
+            .box { 
+                background: #1F2232; 
+                padding: 20px; 
+                border: 1px solid #333645; 
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            }
+            button { 
+                padding: 8px 16px; 
+                margin-right: 5px; 
+                cursor: pointer; 
+                font-weight: 500;
+                font-size: 14px;
+                background: #282c3f; 
+                color: #a0a5c0;
+                border: 1px solid #3d425c;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+            }
+
+            button:hover {
+                background: #33384f;
+                color: #ffffff;
+                border-color: #51587d;
+            }
+            .active, .active:hover { 
+                background: #0056b3; 
+                color: #ffffff; 
+                border: 1px solid #007bff; 
+                box-shadow: 0 0 12px rgba(0,86,179,0.4);
+            }
+        </style>
+    </head>
+    <body>
+    <div class="box">
+        <h2>Monitoreo de Señales - RPi5</h2>
+        <div style="margin-bottom: 15px;">
+            <button id="btn1" class="active" onclick="switchSignal('1')">Señal 1</button>
+            <button id="btn2" onclick="switchSignal('2')">Señal 2</button>
+        </div>
+        
+        <h4 id="title">Visualizando: Señal 1</h4>
+        <div style="height: 300px;"><canvas id="chart"></canvas></div>
+</div>
+
+<script>
+    let activeSignal = '1';
+    let needsUpdate = false;
+    const ctx = document.getElementById('chart').getContext('2d');
+
+    const initialLabels = [];
+    const initialData = [];
+    const maxPoints = 200;
+
+    for (let i = 0; i < maxPoints; i++) {
+        initialLabels.push('');
+        initialData.push(0);
+    }
+
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: { 
+            labels: initialLabels, 
+            datasets: [{ 
+                label: 'Estado Lógico', 
+                data: initialData, 
+                borderColor: '#0056b3', 
+                stepped: true 
+            }] 
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            animation: false,
+            elements: {
+                point: { radius: 0 } 
+            },
+            scales: { 
+                x: { 
+                    ticks: { color: '#ffffff'},
+                    title: { display: true, text: 'Tiempo (Abscisas)', color: '#ffffff' } 
+                },
+                y: { min: -0.2, 
+                    max: 1.2, 
+                    ticks: { color: '#ffffff'},
+                    title: { display: true, text: 'Valor (Ordenadas)', color: '#ffffff' } }
+            }
+        }
+    });
+
+    function getFastTimestamp(){
+        const d = new Date();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        const ss = String(d.getSeconds()).padStart(2, '0');
+        const ms = String(d.getMilliseconds()).padStart(3, '0');
+        return `${hh}:${mm}:${ss}.${ms}`;
+    }
+
+    async function pollData() {
+        try {
+            const res = await fetch('/data');
+            const data = await res.json();
+            
+            
+            const now = getFastTimestamp();
+            
+            
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.shift();
+            
+            
+            chart.data.labels.push(now);
+            chart.data.datasets[0].data.push(data.value);
+
+            chart.update('none'); 
+
+            
+        } catch (err) { 
+            console.error("Error polling:", err); 
+        }
+    }
+
+
+    async function switchSignal(num) {
+        try {
+            const res = await fetch('/change', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ signal: num })
+            });
+            const data = await res.json();
+            
+            if (data.status === 'success') {
+                activeSignal = num;
+                document.getElementById('title').innerText = `Visualizando: Señal ${num}`;
+
+                const resetLabels = [];
+                const resetData = [];
+
+                for (let i = 0; i < maxPoints; i++) {
+                    resetLabels.push('');
+                    resetData.push(0);
+                }
+
+                chart.data.labels = resetLabels;
+                chart.data.datasets[0].data = resetData;
+                chart.update();
+
+                document.getElementById('btn1').className = num === '1' ? 'active' : '';
+                document.getElementById('btn2').className = num === '2' ? 'active' : '';
+            }
+        }   catch (err) { console.error("Error switching:", err); }
+    }
+
+    setInterval(pollData, 25);
+</script>
+</body>
+</html>

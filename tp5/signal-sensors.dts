@@ -1,0 +1,25 @@
+/dts-v1/;
+/plugin/;
+
+#include </usr/src/linux-headers-6.12.75+rpt-common-rpi/include/dt-bindings/gpio/gpio.h>
+
+/ {
+    compatible = "brcm,bcm2712";
+
+    fragment@0 {
+        target-path = "/";
+        __overlay__ {
+            
+            signal_sensors {
+                compatible = "tiny-admins,signal-sensors";
+                status = "okay";
+
+                /* Direct GPIO assignments using standard Pi 5 phandles */
+                signal1-gpios = <&rp1_gpio 23 GPIO_ACTIVE_LOW>;
+                signal2-gpios = <&rp1_gpio 24 GPIO_ACTIVE_LOW>;
+                generator1-gpios = <&rp1_gpio 17 GPIO_ACTIVE_LOW>;
+                generator2-gpios = <&rp1_gpio 27 GPIO_ACTIVE_LOW>;
+            };
+        };
+    };
+};
