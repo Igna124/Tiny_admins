@@ -1,0 +1,96 @@
+Module                  Size  Used by				Module                  Size  Used by
+mimodulo               12288  0				      <
+snd_seq_dummy          12288  0					snd_seq_dummy          12288  0
+snd_hrtimer            12288  1					snd_hrtimer            12288  1
+							      >	snd_intel8x0           53248  1
+							      >	snd_ac97_codec        196608  1 snd_intel8x0
+							      >	ac97_bus               12288  1 snd_ac97_codec
+							      >	qrtr                   53248  2
+							      >	snd_pcm               200704  2 snd_intel8x0,snd_ac97_codec
+							      >	intel_rapl_msr         20480  0
+snd_seq_midi           24576  0					snd_seq_midi           24576  0
+							      >	intel_rapl_common      53248  1 intel_rapl_msr
+snd_seq_midi_event     16384  1 snd_seq_midi			snd_seq_midi_event     16384  1 snd_seq_midi
+snd_rawmidi            57344  1 snd_seq_midi			snd_rawmidi            57344  1 snd_seq_midi
+							      >	intel_uncore_frequency_common    20480  0
+snd_seq               122880  9 snd_seq_midi,snd_seq_midi_eve	snd_seq               122880  9 snd_seq_midi,snd_seq_midi_eve
+snd_seq_device         16384  3 snd_seq,snd_seq_midi,snd_rawm |	intel_pmc_core        135168  0
+snd_timer              53248  2 snd_seq,snd_hrtimer	      <
+snd                   143360  6 snd_seq,snd_seq_device,snd_ti <
+soundcore              16384  1 snd			      <
+qrtr                   53248  2				      <
+intel_rapl_msr         20480  0				      <
+intel_rapl_common      53248  1 intel_rapl_msr		      <
+intel_uncore_frequency_common    16384  0		      <
+intel_pmc_core        122880  0				      <
+pmt_telemetry          16384  1 intel_pmc_core			pmt_telemetry          16384  1 intel_pmc_core
+pmt_class              16384  1 pmt_telemetry		      |	snd_seq_device         16384  3 snd_seq,snd_seq_midi,snd_rawm
+intel_vsec             20480  1 intel_pmc_core		      |	pmt_discovery          20480  1 pmt_telemetry
+kvm_intel             487424  0				      |	pmt_class              20480  2 pmt_telemetry,pmt_discovery
+kvm                  1425408  1 kvm_intel		      |	intel_pmc_ssram_telemetry    16384  1 intel_pmc_core
+irqbypass              12288  1 kvm			      |	snd_timer              53248  3 snd_seq,snd_hrtimer,snd_pcm
+binfmt_misc            24576  1				      |	intel_vsec             24576  2 intel_pmc_ssram_telemetry,pmt
+							      >	polyval_clmulni        12288  0
+							      >	ghash_clmulni_intel    12288  0
+							      >	aesni_intel            98304  0
+rapl                   20480  0					rapl                   20480  0
+							      >	snd                   143360  11 snd_seq,snd_seq_device,snd_i
+							      >	soundcore              16384  1 snd
+i2c_piix4              32768  0					i2c_piix4              32768  0
+							      >	vboxguest              57344  0
+i2c_smbus              20480  1 i2c_piix4			i2c_smbus              20480  1 i2c_piix4
+nls_iso8859_1          12288  1				      <
+joydev                 32768  0					joydev                 32768  0
+input_leds             12288  0					input_leds             12288  0
+mac_hid                12288  0				      <
+serio_raw              20480  0					serio_raw              20480  0
+							      >	mac_hid                12288  0
+							      >	binfmt_misc            24576  1
+sch_fq_codel           24576  2					sch_fq_codel           24576  2
+msr                    12288  0					msr                    12288  0
+parport_pc             53248  1				      |	parport_pc             53248  0
+ppdev                  24576  0					ppdev                  24576  0
+lp                     28672  0				      |	lp                     32768  0
+parport                73728  3 parport_pc,lp,ppdev	      <
+efi_pstore             12288  0					efi_pstore             12288  0
+							      >	parport                73728  3 parport_pc,lp,ppdev
+nfnetlink              20480  1					nfnetlink              20480  1
+dmi_sysfs              24576  0				      |	dmi_sysfs              20480  0
+qemu_fw_cfg            24576  0				      <
+ip_tables              32768  0					ip_tables              32768  0
+x_tables               65536  1 ip_tables			x_tables               65536  1 ip_tables
+autofs4                57344  2					autofs4                57344  2
+btrfs                2088960  0				      |	hid_generic            12288  0
+blake2b_generic        20480  0				      |	vboxvideo              36864  1
+raid10                 73728  0				      |	vga16fb                32768  0
+raid456               192512  0				      |	ahci                   49152  1
+async_raid6_recov      20480  1 raid456			      |	drm_vram_helper        24576  1 vboxvideo
+async_memcpy           16384  2 raid456,async_raid6_recov     |	usbhid                 77824  0
+async_pq               20480  2 raid456,async_raid6_recov     |	hid                   262144  2 usbhid,hid_generic
+async_xor              16384  3 async_pq,raid456,async_raid6_ <
+async_tx               16384  5 async_pq,async_memcpy,async_x <
+xor                    20480  2 async_xor,btrfs		      <
+raid6_pq              126976  4 async_pq,btrfs,raid456,async_ <
+raid1                  61440  0				      <
+raid0                  24576  0				      <
+linear                 16384  0				      <
+dm_mirror              24576  0				      <
+dm_region_hash         24576  1 dm_mirror		      <
+dm_log                 20480  2 dm_region_hash,dm_mirror      <
+polyval_clmulni        12288  0				      <
+polyval_generic        12288  1 polyval_clmulni		      <
+ghash_clmulni_intel    16384  0				      <
+sha256_ssse3           32768  0				      <
+sha1_ssse3             32768  0				      <
+e1000                 180224  0					e1000                 180224  0
+							      >	drm_ttm_helper         16384  3 drm_vram_helper,vboxvideo
+psmouse               217088  0					psmouse               217088  0
+virtio_gpu            106496  1				      |	vgastate               20480  1 vga16fb
+virtio_dma_buf         12288  1 virtio_gpu		      |	ttm                   126976  2 drm_vram_helper,drm_ttm_helpe
+							      >	libahci                53248  1 ahci
+							      >	video                  77824  0
+pata_acpi              12288  0					pata_acpi              12288  0
+floppy                131072  0				      |	wmi                    28672  1 video
+aesni_intel           122880  0				      <
+crypto_simd            16384  1 aesni_intel		      <
+cryptd                 24576  2 crypto_simd,ghash_clmulni_int <
